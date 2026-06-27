@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Capacitors as Communicators · IV — The Coldest Plate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --scope:#0a0f0c;--slate:#0e1512;--panel:#121b17;--grid:#1c2b24;
+    --phos:#6fe6a0;--phos-dim:#3a7a58;--signal:#f0a830;--current:#5fd0e0;
+    --paper:#e8efe9;--paper-dim:#8fa89a;--rule:#1c2b2433;--rose:#e07a9a;
+    --q:#7ab8ff;          /* Paper IV signature: cold quantum blue */
+    --q-dim:#3a5a8a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{background:var(--scope);color:var(--paper);font-family:'Newsreader',Georgia,serif;
+    font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
+
+  .hero{min-height:84vh;display:flex;flex-direction:column;justify-content:center;padding:70px 0 40px}
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--current);margin-bottom:22px;font-weight:500}
+  .kicker .s{color:var(--phos-dim)} .kicker .f{color:var(--q)}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(38px,8vw,78px);line-height:.99;letter-spacing:-.03em}
+  h1 .green{color:var(--phos)} h1 .q{color:var(--q)}
+  .lede{font-size:clamp(19px,2.4vw,24px);color:var(--paper-dim);max-width:640px;margin-top:30px;line-height:1.5}
+  .lede b{color:var(--paper);font-weight:500} .lede .q{color:var(--q)} .lede .green{color:var(--phos)}
+  .recall{font-family:'IBM Plex Mono',monospace;margin-top:34px;font-size:clamp(16px,2.6vw,22px);color:var(--phos);letter-spacing:.01em;line-height:1.6}
+  .recall .q{color:var(--q)} .recall .c{color:var(--paper)}
+  .recall-cap{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--paper-dim);margin-top:12px;line-height:1.6}
+
+  .sec{padding:58px 0;border-top:1px solid var(--rule)}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--current);margin-bottom:14px;font-weight:500}
+  .tag.q{color:var(--q)}
+  h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(25px,4.3vw,37px);line-height:1.06;letter-spacing:-.015em}
+  h2 .green{color:var(--phos)} h2 .q{color:var(--q)}
+  .sec p{margin:18px 0;color:var(--paper);max-width:680px}
+  .sec p.dim{color:var(--paper-dim)}
+  .sec p b{color:var(--paper);font-weight:600}
+  .sec p .amber{color:var(--signal);font-weight:500} .sec p .cyan{color:var(--current);font-weight:500}
+  .sec p .green{color:var(--phos);font-weight:500} .sec p .qc{color:var(--q);font-weight:500}
+  .pull{font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:clamp(20px,3vw,27px);line-height:1.35;color:var(--phos);margin:30px 0;padding-left:20px;border-left:3px solid var(--phos-dim)}
+  .pull.q{color:var(--q);border-left-color:var(--q-dim)}
+  code{font-family:'IBM Plex Mono',monospace;font-size:.85em;color:var(--current);background:#0e1512;padding:2px 7px;border-radius:5px}
+  .flag{font-family:'Newsreader';font-size:15.5px;color:var(--paper-dim);font-style:italic;margin:18px 0;padding:14px 18px;background:#0e151266;border:1px solid var(--rule);border-radius:8px}
+  .flag b{color:var(--rose);font-style:normal;font-weight:600;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:6px}
+
+  .inst{margin:30px 0;border:1px solid var(--grid);border-radius:14px;overflow:hidden;background:var(--slate)}
+  .inst.q{border-color:#28384e}
+  .inst-bar{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--grid);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim)}
+  .inst-bar .led{width:9px;height:9px;border-radius:50%;background:var(--q);box-shadow:0 0 8px var(--q)}
+  .inst-bar .ttl{color:var(--q)}
+  canvas{display:block;width:100%;height:auto;background:var(--scope)}
+  .ctrls{padding:16px 18px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;border-top:1px solid var(--grid)}
+  .ctrl{display:flex;flex-direction:column;gap:6px;flex:1;min-width:150px}
+  .ctrl label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-dim)}
+  .ctrl label .val{color:var(--q);float:right}
+  input[type=range]{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:var(--grid);outline:none;width:100%}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--q);cursor:pointer;box-shadow:0 0 8px var(--q-dim)}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radius:50%;background:var(--q);cursor:pointer}
+  input:focus-visible{outline:2px solid var(--q);outline-offset:3px}
+  .segs{display:flex;gap:6px;flex-wrap:wrap}
+  .seg{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:7px 12px;border:1px solid var(--grid);border-radius:8px;background:var(--panel);color:var(--paper-dim);cursor:pointer;touch-action:manipulation}
+  .seg.on{border-color:var(--q);color:var(--q);background:rgba(122,184,255,.1)}
+  .readout{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--paper-dim);padding:0 18px 16px;line-height:1.6}
+  .readout b{color:var(--q)} .readout .amber{color:var(--signal)} .readout .green{color:var(--phos)} .readout .cyan{color:var(--current)}
+
+  .foot{padding:50px 0 80px;border-top:1px solid var(--rule);margin-top:40px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--paper-dim);line-height:2}
+  .foot b{color:var(--phos)} .foot .q{color:var(--q)}
+
+  .journey{margin:30px 0;border:1px solid var(--grid);border-radius:12px;overflow:hidden}
+  .journey .r{display:grid;grid-template-columns:130px 1fr;border-bottom:1px solid var(--grid)}
+  .journey .r:last-child{border-bottom:none}
+  .journey .r .y{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:12px 14px;border-right:1px solid var(--grid);color:var(--q)}
+  .journey .r .y .yr{color:var(--paper-dim);font-size:10px;display:block;margin-top:2px}
+  .journey .r .d{padding:12px 16px;font-size:14.5px;color:var(--paper-dim)}
+  .journey .r .d b{color:var(--paper)}
+
+  @media (max-width:560px){body{font-size:17px}.ctrl{min-width:100%}.journey .r{grid-template-columns:104px 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Capacitors as Communicators <span class="s">·</span> <span class="f">Paper IV — The Coldest Plate · finale</span></div>
+    <h1>Two plates,<br>at the edge of <span class="q">absolute zero</span></h1>
+    <p class="lede">Follow the humblest capacitor — two conductors and a gap — all the way down: shrink it to microns, cool it near <span class="q">−273°C</span>, and it becomes part of a <b>superconducting qubit</b>. There the same part does the same things it always did — sets a note, and lets things <span class="green">talk across a gap</span> — except now the note is a quantum state and the talk is how a quantum computer reads its own mind.</p>
+    <div class="recall"><span class="c">E_C</span> <span class="c">=</span> <span class="c">e²</span><span class="c">/</span><span class="c">(2</span><span class="q">C</span><span class="c">)</span> &nbsp;·&nbsp; <span class="c">f₀₁</span> <span class="c">≈</span> <span class="c">√(8 E_J E_C) − E_C</span></div>
+    <div class="recall-cap">the cap that began as a charge bucket now <span style="color:var(--q)">tunes a qubit</span> — same physics, coldest stage</div>
+  </header>
+
+  <!-- the reveal -->
+  <section class="sec">
+    <div class="tag q">§14 · the descent</div>
+    <h2>The same part, all the way down</h2>
+    <p>This series began with a slab holding charge (<code>Q = C·V</code>) and grew it into a communicator: a differentiator, a coupler, a filter, a gap-crosser, a memory, a sense. For the finale, hold the part fixed and change only the <em>scale and temperature</em>. Shrink the plates to a few microns. Cool the whole thing to a few thousandths of a degree above absolute zero, where the metal turns superconducting and electrical noise nearly stops. Wire one <b>Josephson junction</b> across the cap — a tiny non-linear element that acts like a quantum inductor — and you have a <span class="qc">transmon</span>: today's leading superconducting qubit.</p>
+    <p>And here's the thing worth the whole paper: <b>the capacitor doesn't become exotic.</b> It still obeys <code>i = C·dv/dt</code>. It still stores charge. It's just that, paired with the junction and cooled into the quantum regime, the same two plates now do two jobs that decide whether a quantum computer works at all — and the second job is, once again, <span class="green">communication</span>.</p>
+    <p class="pull q">The capacitor never changed. The temperature did — and at the bottom of the cold, a charge bucket becomes the thing that sets a qubit's pitch and lets qubits speak.</p>
+  </section>
+
+  <!-- INSTRUMENT 9: THE NOTE + IMMUNITY -->
+  <section class="sec">
+    <div class="tag q">§15 · instrument nine</div>
+    <h2>Job one — <span class="q">the cap tunes the qubit, and makes it deaf to noise</span></h2>
+    <p>A qubit needs a clean <b>frequency</b> — a single quantum "note," the energy gap between its <code>|0⟩</code> and <code>|1⟩</code> states. The capacitor sets it. Its charging energy is <code>E_C = e²/(2C)</code>, and the qubit's frequency follows <code>f₀₁ ≈ √(8 E_J E_C) − E_C</code>. Bigger cap → smaller <code>E_C</code> → lower, and crucially <em>steadier</em>, note.</p>
+    <p>Why steadier is the whole trick. A small-cap qubit (the old "Cooper-pair box") is violently sensitive to stray electric charge drifting nearby — its note wobbles with every bit of charge noise, and a wobbling note is a dead qubit. Make the cap <b>big</b> and that sensitivity falls away <em>exponentially</em>: the note holds still no matter what charge floats past. That single move — a capacitor large enough to drown out charge noise — is what made the transmon work (Koch et al., 2007), and it's why nearly every quantum computer you've heard of has one.</p>
+
+    <div class="inst q">
+      <div class="inst-bar"><span class="led"></span><span class="ttl">THE QUBIT NOTE</span> · E_C = e²/2C · the energy ladder &amp; charge-noise immunity</div>
+      <canvas id="note"></canvas>
+      <div class="ctrls">
+        <div class="ctrl"><label>shunt capacitor C <span class="val" id="nCval">70 fF</span></label>
+          <input type="range" id="nC" min="20" max="120" step="1" value="70"></div>
+        <div class="ctrl"><label>injected charge noise <span class="val" id="nNval">1.0×</span></label>
+          <input type="range" id="nN" min="0" max="2" step="0.05" value="1"></div>
+      </div>
+      <div class="readout" id="nRead">left: the qubit's energy ladder — the <span class="cyan">|0⟩→|1⟩ gap</span> is the note the cap sets. right: how much that note <span class="amber">wobbles</span> under charge noise. shrink the cap and watch the note rise <em>and</em> start shaking; grow it and the shaking vanishes.</div>
+    </div>
+    <p class="pull">The big cap doesn't store more information. It stores more <em>indifference</em> — it makes the qubit deaf to the one kind of change you don't want it to hear. A change-detector, tuned to ignore.</p>
+    <div class="flag"><b>honest flag</b>Real numbers, checked in node: C≈70fF gives E_C/h≈277 MHz and f₀₁≈5.5 GHz, squarely where real transmons live (~4–6 GHz); charge dispersion falls like <code>exp(−√(8·E_J/E_C))</code>, from ~6% at E_J/E_C=1 to ~2×10⁻⁹ at 50. The ladder here is schematic (a real transmon is weakly anharmonic — the rungs are <em>almost</em> evenly spaced, and that tiny unevenness is what lets you address just |0⟩↔|1⟩). The junction (E_J) is the quantum part; the capacitor is ordinary — that's the point.</p>
+  </section>
+
+  <!-- INSTRUMENT 10: THE COUPLING CAP -->
+  <section class="sec">
+    <div class="tag q">§16 · instrument ten · the thesis, intact at the edge</div>
+    <h2>Job two — <span class="green">the cap still lets them talk</span></h2>
+    <p>Here the whole series comes home. A qubit is useless if you can't read it or connect it — and the connection is made by a <b>coupling capacitor</b>, exactly the part from Paper II, doing exactly its Paper II job: letting a signal cross a gap. A small cap links the qubit to a microwave <span class="cyan">resonator</span>. The qubit's state then shifts the resonator's frequency by a tiny amount — one way for <code>|0⟩</code>, the other for <code>|1⟩</code>. So you <b>probe the resonator</b>, see which way its peak moved, and you've read the qubit's state <em>without touching the qubit</em>. It's called dispersive readout, and the messenger is a capacitor.</p>
+
+    <div class="inst q">
+      <div class="inst-bar"><span class="led"></span><span class="ttl">THE COUPLING CAP</span> · dispersive readout · the qubit's state shifts the resonator</div>
+      <canvas id="readout"></canvas>
+      <div class="ctrls">
+        <div class="ctrl" style="flex:2;min-width:100%"><label>qubit state</label>
+          <div class="segs" id="qState">
+            <div class="seg on" data-s="0">|0⟩ ground</div>
+            <div class="seg" data-s="1">|1⟩ excited</div>
+            <div class="seg" data-s="sup">superposition</div>
+          </div></div>
+        <div class="ctrl"><label>coupling strength <span class="val" id="rGval">1.0×</span></label>
+          <input type="range" id="rG" min="0.3" max="2" step="0.05" value="1"></div>
+      </div>
+      <div class="readout" id="rRead">the <span class="cyan">resonator peak</span> sits at one frequency for <span class="green">|0⟩</span> and a shifted one for |1⟩. send a probe tone, watch where the peak is, and you've read the qubit — across the coupling cap, without disturbing it. weaken the coupling and the shift shrinks toward unreadable.</div>
+    </div>
+    <p class="pull q">Read the qubit by reading the gap. The capacitor that crossed an empty space in Paper II is the same one that reads a quantum mind in Paper IV — the message was always carried by the change in the field, never by anything touching.</p>
+    <div class="flag"><b>honest flag</b>This is the real architecture of circuit QED, simplified hard: the dispersive shift χ and the resonator are genuine, but I'm showing the idea (state → peak position → readout), not the full Jaynes–Cummings physics, photon shot noise, or the measurement back-action that makes "without disturbing it" only true in the dispersive limit. A superposition doesn't give a third peak in a single shot — measurement collapses it; the "blended" view here is illustrative of the ensemble, flagged so it doesn't read as magic.</p>
+  </section>
+
+  <!-- CLOSE -->
+  <section class="sec">
+    <div class="tag">§17 · the whole journey</div>
+    <h2>From a jar of charge to a <span class="q">quantum note</span></h2>
+    <p>Four papers, one part, and it never stopped being what it was at the start: two conductors that notice change and let things couple across a gap. Watch the entire arc of the capacitor in one column —</p>
+
+    <div class="journey">
+      <div class="r"><div class="y">Leyden jar<span class="yr">1745</span></div><div class="d">the first capacitor — a bottle that <b>stored a shock</b>. charge, held. <code>Q = C·V</code>, the slab.</div></div>
+      <div class="r"><div class="y">the differentiator<span class="yr">Paper I</span></div><div class="d">it reports <b>change, not state</b>. <code>i = C·dv/dt</code>. the seed of everything.</div></div>
+      <div class="r"><div class="y">the channel<span class="yr">Paper II</span></div><div class="d">carry a signal, filter it, <b>cross a gap with no wire</b> — displacement current, Maxwell-real.</div></div>
+      <div class="r"><div class="y">time &amp; the world<span class="yr">Paper III</span></div><div class="d">hold a value, <b>store a bit against the leak</b>, and let the world write the field — the <code>V·dC/dt</code> term.</div></div>
+      <div class="r"><div class="y">the transmon<span class="yr">2007 · Paper IV</span></div><div class="d">cooled to the quantum edge, it <b>tunes a qubit's note</b> and <b>carries its state out</b> — the same two plates, the coldest stage.</div></div>
+    </div>
+
+    <p>The capacitor was never a bucket. It was always an instrument for noticing that something changed, and for letting that change reach across a gap — and that is exactly, precisely, the definition of communication. From a static shock in a jar to the readout of a quantum state, every job in this series was the same two ideas wearing different clothes: <span class="green">report the difference</span>, and <span class="qc">let it couple across the space between</span>.</p>
+    <p class="pull">A capacitor cannot hear what holds still — so across four papers and two hundred and eighty years it kept finding new kinds of change to carry, all the way down to the coldest plate in the machine.</p>
+
+    <p class="dim">A closing note for the archive: this is the same <em>transmon</em> that already has its own sphere in ud0 — the superconducting qubit, the anharmonic ladder, the shunt cap and E_J/E_C. This series arrives at it from the other direction: not from the qubit down, but from the humblest capacitor up. The two meet exactly at this plate. The communicator series ends where the quantum corpus begins.</p>
+  </section>
+
+  <div class="foot">
+    CAPACITORS AS COMMUNICATORS · PAPER IV — THE COLDEST PLATE · series finale<br>
+    <b>E_C = e²/(2C)</b> · <b>f₀₁ ≈ √(8 E_J E_C) − E_C</b> · charge dispersion ~ exp(−√(8·E_J/E_C)) · all checked in node<br>
+    C≈70fF → E_C/h≈277MHz → f₀₁≈5.5GHz · the transmon trick = a cap big enough to drown charge noise (Koch 2007)<br>
+    <span class="q">four papers · one part · it only ever reported a change, and let it cross a gap</span>
+  </div>
+
+</div>
+
+<script>
+"use strict";
+const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const COL={scope:"#0a0f0c",grid:"#1c2b24",phos:"#6fe6a0",phosDim:"#3a7a58",
+  signal:"#f0a830",current:"#5fd0e0",paper:"#8fa89a",q:"#7ab8ff",qDim:"#3a5a8a"};
+
+function setup(cv,ratio){
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  const cssW=cv.parentElement.clientWidth, cssH=Math.round(cssW*ratio);
+  cv.width=cssW*dpr; cv.height=cssH*dpr; cv.style.height=cssH+"px";
+  const ctx=cv.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx,W:cssW,H:cssH};
+}
+function gridlines(ctx,W,H){ ctx.strokeStyle=COL.grid;ctx.lineWidth=1;
+  for(let x=0;x<=W;x+=W/12){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<=H;y+=H/8){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();} }
+function glow(ctx,pts,gx,gy,color,gw){ ctx.shadowColor=color;ctx.shadowBlur=gw||8;
+  ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();
+  pts.forEach((o,k)=>{const x=gx(o,k),y=gy(o,k);k?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+  ctx.stroke();ctx.shadowBlur=0; }
+
+const e=1.602176634e-19, h=6.62607015e-34;
+const EcHz=C=> (e*e/(2*C))/h;            // C in farads → Hz
+const Ej=15e9;                            // E_J/h fixed at 15 GHz
+const f01=(EjH,EcH)=> Math.sqrt(8*EjH*EcH)-EcH;
+
+/* ── (9) THE QUBIT NOTE + IMMUNITY ── */
+(function(){
+  const cv=document.getElementById("note");
+  const Cin=document.getElementById("nC"), Nin=document.getElementById("nN");
+  const Cv=document.getElementById("nCval"), Nv=document.getElementById("nNval");
+  const read=document.getElementById("nRead");
+  let d=setup(cv,0.6); window.addEventListener("resize",()=>d=setup(cv,0.6));
+  function draw(t){
+    const {ctx,W,H}=d;
+    const Cf=parseFloat(Cin.value)*1e-15, noise=parseFloat(Nin.value);
+    const Ec=EcHz(Cf), f=f01(Ej,Ec)/1e9, ratio=Ej/Ec;
+    const disp=Math.exp(-Math.sqrt(8*ratio));         // charge dispersion (0..~0.06)
+    Cv.textContent=parseFloat(Cin.value).toFixed(0)+" fF";
+    Nv.textContent=noise.toFixed(1)+"×";
+    ctx.clearRect(0,0,W,H); gridlines(ctx,W,H);
+
+    // LEFT: energy ladder. spacing of |0>->|1> ∝ f01. anharmonic (rungs shrink by Ec).
+    const lx=W*0.10, lw=W*0.34, base=H*0.86, top=H*0.12;
+    ctx.fillStyle=COL.paper;ctx.font="10px 'IBM Plex Mono',monospace";ctx.textAlign="left";
+    ctx.fillText("energy ladder",lx,top-2);
+    // levels: E_n ∝ n*f01 - anharmonic. scale to fit.
+    const fNorm=(f-3.5)/4;  // ~0..1 across slider range
+    const g01=(0.30+0.34*fNorm);  // fractional height of first gap
+    let y=base; const levels=[0]; let gap=g01;
+    for(let n=1;n<=4;n++){ levels.push(levels[n-1]+gap); gap*=0.86; } // anharmonic shrink
+    const span=levels[4]; 
+    levels.forEach((lv,n)=>{
+      const yy=base-(lv/span)*(base-top);
+      // charge-noise wobble on the upper levels (∝ disp*noise), animated
+      const wob = (n>0? disp*noise*40*Math.sin(t*3+n) : 0);
+      ctx.strokeStyle = n===0?COL.q : (n===1?COL.current:"#4a6a8a");
+      ctx.lineWidth = n<=1?2.2:1.4;
+      ctx.beginPath();ctx.moveTo(lx,yy+wob);ctx.lineTo(lx+lw,yy+wob);ctx.stroke();
+      ctx.fillStyle=ctx.strokeStyle;ctx.font="11px 'IBM Plex Mono',monospace";ctx.textAlign="right";
+      ctx.fillText("|"+n+"⟩",lx-4,yy+wob);
+    });
+    // the 0->1 gap arrow = the note
+    const y0=base, y1=base-(levels[1]/span)*(base-top);
+    ctx.strokeStyle=COL.current;ctx.lineWidth=1.4;ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(lx+lw+10,y0);ctx.lineTo(lx+lw+10,y1);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=COL.current;ctx.textAlign="left";ctx.font="11px 'IBM Plex Mono',monospace";
+    ctx.fillText("f₀₁ = "+f.toFixed(2)+" GHz",lx+lw+16,(y0+y1)/2);
+    ctx.fillStyle=COL.paper;ctx.fillText("the note",lx+lw+16,(y0+y1)/2+15);
+
+    // RIGHT: charge-noise sensitivity — the note as a band that widens with dispersion
+    const rx=W*0.62, rw=W*0.32, ry=H*0.18, rh=H*0.6;
+    ctx.strokeStyle="#2a3b32";ctx.lineWidth=1;ctx.strokeRect(rx,ry,rw,rh);
+    ctx.fillStyle=COL.paper;ctx.font="10px 'IBM Plex Mono',monospace";ctx.textAlign="left";
+    ctx.fillText("the note vs charge noise",rx,ry-4);
+    // draw the qubit frequency as a horizontal line, smeared into a band of half-width ∝ disp*noise
+    const fy=ry+rh*0.5;
+    const bw=Math.min(rh*0.46, disp*noise*900);  // band half-height
+    // band fill
+    const grd=ctx.createLinearGradient(0,fy-bw,0,fy+bw);
+    grd.addColorStop(0,"rgba(240,168,48,0)");grd.addColorStop(0.5,"rgba(240,168,48,0.4)");grd.addColorStop(1,"rgba(240,168,48,0)");
+    if(bw>1){ctx.fillStyle=grd;ctx.fillRect(rx,fy-bw,rw,bw*2);}
+    // center line (the ideal note)
+    ctx.strokeStyle=COL.q;ctx.lineWidth=2;ctx.shadowColor=COL.q;ctx.shadowBlur=6;
+    ctx.beginPath();ctx.moveTo(rx,fy);ctx.lineTo(rx+rw,fy);ctx.stroke();ctx.shadowBlur=0;
+    // verdict
+    ctx.font="11px 'IBM Plex Mono',monospace";ctx.textAlign="center";
+    const stable = disp*noise < 0.002;
+    ctx.fillStyle = stable?COL.phos:COL.signal;
+    ctx.fillText(stable?"steady — noise-immune":"wobbling — charge-sensitive", rx+rw/2, ry+rh+18);
+
+    read.innerHTML=`C=${parseFloat(Cin.value).toFixed(0)}fF → E_C/h=${(Ec/1e6).toFixed(0)}MHz, E_J/E_C=${ratio.toFixed(0)} → note <b>${f.toFixed(2)} GHz</b>. charge dispersion ${disp<1e-4?disp.toExponential(1):disp.toFixed(4)} — ${disp*noise<0.002?"<span class='green'>the big cap holds the note still</span>":"<span class='amber'>small cap: the note shakes with charge noise</span>"}.`;
+    requestAnimationFrame(draw);
+  } requestAnimationFrame(draw);
+})();
+
+/* ── (10) THE COUPLING CAP / DISPERSIVE READOUT ── */
+(function(){
+  const cv=document.getElementById("readout");
+  const Gin=document.getElementById("rG"); const Gv=document.getElementById("rGval");
+  const seg=document.getElementById("qState"), read=document.getElementById("rRead");
+  let state="0";
+  seg.querySelectorAll(".seg").forEach(s=>s.onclick=()=>{state=s.dataset.s;seg.querySelectorAll(".seg").forEach(o=>o.classList.toggle("on",o===s));});
+  let d=setup(cv,0.58); window.addEventListener("resize",()=>d=setup(cv,0.58));
+  function lorentz(x,x0,w){ return 1/(1+((x-x0)/w)**2); }
+  function draw(t){
+    const {ctx,W,H}=d; const g=parseFloat(Gin.value); Gv.textContent=g.toFixed(1)+"×";
+    ctx.clearRect(0,0,W,H); gridlines(ctx,W,H);
+
+    // left: the circuit — qubit —||— resonator
+    const qx=W*0.12, cy=H*0.42;
+    // qubit box
+    ctx.strokeStyle=COL.q;ctx.lineWidth=2;ctx.strokeRect(qx-22,cy-22,44,44);
+    ctx.fillStyle=COL.q;ctx.font="13px 'IBM Plex Mono',monospace";ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillText(state==="sup"?"|ψ⟩":("|"+state+"⟩"),qx,cy);
+    ctx.fillStyle=COL.paper;ctx.font="9px 'IBM Plex Mono',monospace";ctx.fillText("transmon",qx,cy+34);
+    // coupling cap symbol
+    const ccx=qx+W*0.10;
+    ctx.strokeStyle=COL.phos;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(qx+22,cy);ctx.lineTo(ccx-8,cy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(ccx-8,cy-12);ctx.lineTo(ccx-8,cy+12);ctx.moveTo(ccx+8,cy-12);ctx.lineTo(ccx+8,cy+12);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(ccx+8,cy);ctx.lineTo(ccx+W*0.06,cy);ctx.stroke();
+    ctx.fillStyle=COL.phos;ctx.font="9px 'IBM Plex Mono',monospace";ctx.fillText("coupling C",ccx,cy+22);
+    // resonator (coil-ish)
+    const rxs=ccx+W*0.06;
+    ctx.strokeStyle=COL.current;ctx.lineWidth=2;ctx.beginPath();
+    for(let i=0;i<=24;i++){const xx=rxs+i*3;const yy=cy+Math.sin(i*0.9)*7;i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);}
+    ctx.stroke();
+    ctx.fillStyle=COL.current;ctx.fillText("resonator",rxs+34,cy+22);
+
+    // right: the resonator spectrum, peak shifted by qubit state
+    const sx=W*0.40, sw=W*0.55, sy=H*0.6, sh=H*0.34, baseY=sy+sh;
+    ctx.strokeStyle="#2a3b32";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(sx,baseY);ctx.lineTo(sx+sw,baseY);ctx.stroke();
+    ctx.fillStyle=COL.paper;ctx.font="10px 'IBM Plex Mono',monospace";ctx.textAlign="left";ctx.fillText("resonator response →  probe frequency",sx,sy-6);
+    const chi=0.16*g;            // dispersive shift (fraction of axis)
+    const w=0.05;                // peak width
+    function peak(center,color,alpha){
+      ctx.strokeStyle=color;ctx.globalAlpha=alpha;ctx.shadowColor=color;ctx.shadowBlur=6;ctx.lineWidth=2;ctx.beginPath();
+      for(let k=0;k<=200;k++){const fx=k/200;const y=baseY-lorentz(fx,center,w)*sh*0.92;
+        const x=sx+sw*fx;k?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+      ctx.stroke();ctx.shadowBlur=0;ctx.globalAlpha=1;
+    }
+    const c0=0.5-chi, c1=0.5+chi;
+    if(state==="0"){ peak(c0,COL.phos,1); markTone(ctx,sx,sw,baseY,sh,c0,"reads |0⟩",COL.phos); }
+    else if(state==="1"){ peak(c1,COL.current,1); markTone(ctx,sx,sw,baseY,sh,c1,"reads |1⟩",COL.current); }
+    else { peak(c0,COL.phos,0.55); peak(c1,COL.current,0.55);
+      ctx.fillStyle=COL.paper;ctx.font="10px 'IBM Plex Mono',monospace";ctx.textAlign="center";
+      ctx.fillText("two possible peaks — a single measurement picks one (collapse)",sx+sw/2,sy+8);}
+    // the shift markers
+    ctx.strokeStyle="#3a4d43";ctx.setLineDash([2,3]);
+    [c0,c1].forEach(c=>{ctx.beginPath();ctx.moveTo(sx+sw*c,baseY);ctx.lineTo(sx+sw*c,sy);ctx.stroke();});
+    ctx.setLineDash([]);
+    ctx.fillStyle=COL.paper;ctx.font="9px 'IBM Plex Mono',monospace";ctx.textAlign="center";
+    ctx.fillText("±χ shift",sx+sw*0.5,baseY+14);
+
+    read.innerHTML = state==="sup"
+      ? `superposition: the resonator <em>could</em> sit at either peak — one shot of the probe collapses it to <span class="green">|0⟩</span> or <span class="cyan">|1⟩</span>. the coupling cap still carries the answer out.`
+      : `qubit <b>|${state}⟩</b> → resonator peak shifts ${state==="0"?"left":"right"} by χ. probe it, read the peak, know the state — through the <span class="green">coupling cap</span>, without touching the qubit. weaker coupling → smaller shift → harder to read.`;
+    requestAnimationFrame(draw);
+  }
+  function markTone(ctx,sx,sw,baseY,sh,c,label,color){
+    ctx.fillStyle=color;ctx.beginPath();ctx.arc(sx+sw*c,baseY-sh*0.92,4,0,Math.PI*2);ctx.fill();
+    ctx.font="10px 'IBM Plex Mono',monospace";ctx.textAlign="center";ctx.fillText(label,sx+sw*c,baseY-sh*0.92-10);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
